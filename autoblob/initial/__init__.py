@@ -1,5 +1,7 @@
 from .arm_ivt_finder import detect_arm_ivt
 from .cpu_rec import cpu_rec_initial
+from .cubscout import cubscout_detect_arch
+
 import logging
 l = logging.getLogger("autoblob.initial")
 
@@ -35,6 +37,7 @@ def autodetect_initial(stream):
         stream.seek(0)
 
 
-initial_detectors = [cpu_rec_initial,
-                     detect_arm_ivt]
+initial_detectors = [detect_arm_ivt,
+                     cubscout_detect_arch,
+                     cpu_rec_initial]
 

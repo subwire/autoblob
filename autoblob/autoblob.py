@@ -35,6 +35,11 @@ class AutoBlob(Blob):
         if self.arch is None:
             if arch is None:
                 raise CLEError("AutoBlob couldn't determine your arch.  Try specifying one.!")
+            if isinstance(arch, str):
+               try:
+                   arch = arch_from_id(arch)
+               except:
+                   raise RuntimeError("We do not know how to support architecture %s.")
             self.set_arch(arch)
 
         self.linked_base = kwargs.get('custom_base_addr', base)
@@ -75,12 +80,14 @@ class AutoBlob(Blob):
     @staticmethod
     def is_compatible(stream):
         arch, base, entry = autodetect_initial(stream)
-        if arch and base and entry:
-            l.info("AutoBlob thinks the arch is %s, the base address is %#08x, and the entry point is %#08x, and will"
-                   " now try to load the binary.  If this is wrong, you can manually use the Blob loader backend to"
-                   " specify custom parameters" % (arch, base, entry))
-            return True
-        return False
+        if not arch and not base and not entry:
+            l.error("AutoBlob could not figure out what your binary is.  Consider using Blob manually.")
+            return False
+        l.info("AutoBlob results:")
+        l.info("Architecture: %s" % repr(arch))
+        l.info("Base address: %s" % (hex(base) if isinstance(base, int) else repr(base)))
+        l.info("Entry point: %s" % (hex(entry) if isinstance(entry, int) else repr(entry)))
+        return True
 
     def autodetect_secondary(self):
         """
