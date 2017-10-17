@@ -1,22 +1,24 @@
 #from cpu_rec import TrainingData, FileAnalysis
 import logging
 import sys
-
+import os
+import imp
 l = logging.getLogger("autoblob.cpu_rec")
 
-paths = ["../../lib/cpu_rec/cpu_rec.py"]
+paths = ["../lib/cpu_rec/cpu_rec.py"]
 
 def find_cpu_rec():
     for filename in paths:
         try:
             path, name = os.path.split(os.path.abspath(filename))
             name, ext = os.path.splitext(name)
+            print path, name
             f, filename, data = imp.find_module(name, [path])
             mod = imp.load_module(name, f, filename, data)
             print 'After: %s in sys.modules ==' % name, name in sys.modules
             return mod
         except:
-            pass
+            l.exception(filename)
     else:
         l.warning("cpu_rec not found!")
         return None

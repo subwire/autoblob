@@ -1,7 +1,9 @@
 from .arm_ivt_finder import detect_arm_ivt
+from .cpu_rec import cpu_rec_initial
+import logging
+l = logging.getLogger("autoblob.initial")
 
 
-@staticmethod
 def autodetect_initial(stream):
     """
     Pre-loading autodetection code should go here.
@@ -33,5 +35,6 @@ def autodetect_initial(stream):
         stream.seek(0)
 
 
-initial_detectors = [arm_ivt_finder]
+initial_detectors = [cpu_rec_initial,
+                     detect_arm_ivt]
 

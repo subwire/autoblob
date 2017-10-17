@@ -1,8 +1,12 @@
+import backports.lzma as lzma
 from cle.backends import Backend, register_backend, Blob
 from cle.errors import CLEError
+import os
 import struct
 import archinfo
 import logging
+import sys
+from initial import autodetect_initial
 l = logging.getLogger("autoblob")
 
 __all__ = ('AutoBlob',)
@@ -26,7 +30,7 @@ class AutoBlob(Blob):
         You can't specify both ``custom_offset`` and ``segments``.
         """
         Backend.__init__(self, binary, **kwargs)
-        arch, base, entry = AutoBlob.autodetect_initial(self.binary_stream)
+        arch, base, entry = autodetect_initial(self.binary_stream)
 
         if self.arch is None:
             if arch is None:
@@ -70,11 +74,11 @@ class AutoBlob(Blob):
 
     @staticmethod
     def is_compatible(stream):
-        arch, base, entry = AutoBlob.autodetect_initial(stream)
+        arch, base, entry = autodetect_initial(stream)
         if arch and base and entry:
             l.info("AutoBlob thinks the arch is %s, the base address is %#08x, and the entry point is %#08x, and will"
-                   "now try to load the binary.  If this is wrong, you can manually use the Blob loader backend to"
-                   "specify custom parameters" % (arch, base, entry))
+                   " now try to load the binary.  If this is wrong, you can manually use the Blob loader backend to"
+                   " specify custom parameters" % (arch, base, entry))
             return True
         return False
 
@@ -91,7 +95,10 @@ class AutoBlob(Blob):
 
 
 
-    initial_heuristics = [detect_arm_ivt]
-
-
-register_backend("autoblob", AutoBlob)
+if __name__ == '__main__':
+    logging.basicConfig()
+    l.setLevel(logging.DEBUG)
+    with open(sys.argv[1], 'rb') as stream:
+        AutoBlob.is_compatible(stream)
+else:
+    register_backend("autoblob", AutoBlob)
