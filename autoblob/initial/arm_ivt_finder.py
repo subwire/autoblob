@@ -1,5 +1,6 @@
 import logging
 import struct
+import archinfo
 l = logging.getLogger("autoblob")
 
 def detect_arm_ivt(stream):
