@@ -48,5 +48,5 @@ if __name__ == '__main__':
     logging.basicConfig()
     l.setLevel(logging.DEBUG)
     with open(sys.argv[1], 'rb') as stream:
-        print cubscout_detect_arch(stream)
+        print(cubscout_detect_arch(stream))
 

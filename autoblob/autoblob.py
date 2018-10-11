@@ -1,4 +1,4 @@
-import backports.lzma as lzma
+import lzma
 from cle.backends import Backend, register_backend, Blob
 from cle.errors import CLEError
 import os
@@ -6,7 +6,7 @@ import struct
 import archinfo
 import logging
 import sys
-from initial import autodetect_initial
+from .initial import autodetect_initial
 l = logging.getLogger("autoblob")
 
 __all__ = ('AutoBlob',)
@@ -17,17 +17,17 @@ class AutoBlob(Blob):
     A backend that uses heuristics, hacks, magic, and unicorn horn concentrate to figure out what's in your blobs
     It will take a guess as to the base address, entry point, and architecture.
     The rest, however, is up to you!
-    You can still give it a hint via the custom_arch, custom_offset, and custom_entry_point params.
+    You can still give it a hint via the arch, offset, and entry_point params.
     """
 
-    def __init__(self, binary, custom_offset=None, segments=None, **kwargs):
+    def __init__(self, binary, offset=None, segments=None, **kwargs):
         """
-        :param custom_arch:   (required) an :class:`archinfo.Arch` for the binary blob.
-        :param custom_offset: Skip this many bytes from the beginning of the file.
+        :param arch:   (required) an :class:`archinfo.Arch` for the binary blob.
+        :param offset: Skip this many bytes from the beginning of the file.
         :param segments:      List of tuples describing how to map data into memory. Tuples
                               are of ``(file_offset, mem_addr, size)``.
 
-        You can't specify both ``custom_offset`` and ``segments``.
+        You can't specify both ``offset`` and ``segments``.
         """
         Backend.__init__(self, binary, **kwargs)
         arch, base, entry = autodetect_initial(self.binary_stream)
@@ -42,7 +42,7 @@ class AutoBlob(Blob):
                    raise RuntimeError("We do not know how to support architecture %s.")
             self.set_arch(arch)
 
-        self.linked_base = kwargs.get('custom_base_addr', base)
+        self.linked_base = kwargs.get('base_addr', base)
         if self.linked_base is None:
             l.warning("AutoBlob could not detect the base address.  Assuming 0")
             self.linked_base = 0

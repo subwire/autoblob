@@ -12,10 +12,10 @@ def find_cpu_rec():
         try:
             path, name = os.path.split(os.path.abspath(filename))
             name, ext = os.path.splitext(name)
-            print path, name
+            l.debug(path, name)
             f, filename, data = imp.find_module(name, [path])
             mod = imp.load_module(name, f, filename, data)
-            print 'After: %s in sys.modules ==' % name, name in sys.modules
+            l.debug('After: %s in sys.modules ==' % name, name in sys.modules)
             return mod
         except:
             l.exception(filename)
@@ -68,5 +68,5 @@ def cpu_rec_initial(stream):
 if __name__ == '__main__':
     l.setLevel(logging.DEBUG)
     with open(sys.argv[1], 'rb') as f:
-        print cpu_rec_initial(f)[0]
+        print(cpu_rec_initial(f)[0])
         
