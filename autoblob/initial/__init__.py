@@ -25,7 +25,7 @@ def autodetect_initial(stream):
             if arch is not None and base is not None and entry is not None:
                 break
             a, b, e = det(stream)
-            l.debug("%s: Arch: %s, Base: %s, Entry: %s" % (det.func_name, repr(a), repr(b), repr(e)))
+            l.debug("%s: Arch: %s, Base: %s, Entry: %s" % (det.__name__, repr(a), repr(b), repr(e)))
             arch = a if arch is None else arch
             base = b if base is None else base
             entry = e if entry is None else entry
