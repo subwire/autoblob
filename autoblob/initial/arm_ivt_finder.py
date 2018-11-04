@@ -19,7 +19,7 @@ def detect_arm_ivt(stream):
         maybe_le_sp = struct.unpack('<I', maybe_sp)[0]
         maybe_be_sp = struct.unpack(">I", maybe_sp)[0]
         if min_arm_sp < maybe_le_sp < max_arm_sp:
-            maybe_arch = archinfo.ArchARMEL(endness=archinfo.Endness.LE)
+            maybe_arch = archinfo.ArchARMCortexM(endness=archinfo.Endness.LE)
             l.debug("Found possible Little-Endian ARM IVT with initial SP %#08x" % maybe_le_sp)
             maybe_entry = struct.unpack('<I', stream.read(4))[0]
             l.debug("Reset vector at %#08x" % maybe_entry)
