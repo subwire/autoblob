@@ -34,7 +34,7 @@ def cubscout_detect_arch(stream, cookiesize=1):
         l.debug("%s %s hits %d times", arch.name, arch.memory_endness,
                 votes[(arch.name, arch.memory_endness)])
 
-    arch_name, endianness, hits = sorted([(k[0], k[1], v) for k, v in votes.iteritems()], key=lambda x: x[2], reverse=True)[0]
+    arch_name, endianness, hits = sorted([(k[0], k[1], v) for k, v in votes.items()], key=lambda x: x[2], reverse=True)[0]
     if hits < cookiesize * 2:
         # this cannot possibly be code
         l.debug("CubScout thinks this is Data")
