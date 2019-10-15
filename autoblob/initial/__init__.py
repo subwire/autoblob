@@ -1,4 +1,5 @@
 from .arm_ivt_finder import detect_arm_ivt
+from .marvell_fw_finder import detect_marvell_fw
 from .cpu_rec import cpu_rec_initial
 from .cubscout import cubscout_detect_arch
 
@@ -37,7 +38,8 @@ def autodetect_initial(stream):
         stream.seek(0)
 
 
-initial_detectors = [detect_arm_ivt,
+initial_detectors = [detect_marvell_fw,
+                     detect_arm_ivt,
                      cubscout_detect_arch,
                      cpu_rec_initial]
 

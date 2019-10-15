@@ -5,7 +5,10 @@ import os
 import imp
 l = logging.getLogger("autoblob.cpu_rec")
 
-paths = ["../lib/cpu_rec/cpu_rec.py"]
+package_directory = os.path.dirname(os.path.abspath(__file__))
+
+paths = ["../lib/cpu_rec/cpu_rec.py",
+         os.path.join(package_directory,"../../lib/cpu_rec/cpu_rec.py")]
 
 def find_cpu_rec():
     for filename in paths:
@@ -18,7 +21,8 @@ def find_cpu_rec():
             l.debug('After: %s in sys.modules ==' % name, name in sys.modules)
             return mod
         except:
-            l.exception(filename)
+            pass
+            #l.exception(filename)
     else:
         l.warning("cpu_rec not found!")
         return None
