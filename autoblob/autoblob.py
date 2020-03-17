@@ -20,7 +20,7 @@ class AutoBlob(Blob):
     You can still give it a hint via the arch, offset, and entry_point params.
     """
 
-    def __init__(self, binary, offset=None, segments=None, **kwargs):
+    def __init__(self, binary, binary_stream, offset=None, segments=None, **kwargs):
         """
         :param arch:   (required) an :class:`archinfo.Arch` for the binary blob.
         :param offset: Skip this many bytes from the beginning of the file.
@@ -29,8 +29,8 @@ class AutoBlob(Blob):
 
         You can't specify both ``offset`` and ``segments``.
         """
-        Backend.__init__(self, binary, **kwargs)
-        arch, base, entry = autodetect_initial(self.binary_stream)
+        Backend.__init__(self, binary, binary_stream, **kwargs)
+        arch, base, entry = autodetect_initial(self._binary_stream)
 
         if self.arch is None:
             if arch is None:
@@ -72,8 +72,8 @@ class AutoBlob(Blob):
                 self.binary_stream.seek(0, 2)
                 segments = [(0, self.linked_base, self.binary_stream.tell())]
         """
-        self.binary_stream.seek(0, 2)
-        segments = [(0, self.linked_base, self.binary_stream.tell())]
+        self._binary_stream.seek(0, 2)
+        segments = [(0, self.linked_base, self._binary_stream.tell())]
         for file_offset, mem_addr, size in segments:
             self._load(file_offset, mem_addr, size)
 
