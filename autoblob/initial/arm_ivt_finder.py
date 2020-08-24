@@ -10,7 +10,7 @@ def detect_arm_ivt(stream):
     :type stream: file
     :return:
     """
-    min_arm_sp = 0x20000000
+    min_arm_sp = 0x1FFF0000
     max_arm_sp = 0x20100000
 
     # TODO: We're just looking at the front for now
